@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Latin-square assignment tables for the question-act projection and turn-completion listening studies in the speech continuation paper.">
+  <meta name="theme-color" content="#183c3a">
+  <title>Listening-study assignments · Speech continuation task</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#assignments">Skip to assignment tables</a>
+  <header class="masthead wrap">
+    <a class="wordmark" href="./" aria-label="Speech continuation task home"><span class="mark" aria-hidden="true">↗</span> Speech continuation task</a>
+    <span class="masthead-label">Research materials</span>
+  </header>
+
+  <main>
+    <section class="hero wrap" aria-labelledby="paper-title">
+      <p class="eyebrow">Listening studies</p>
+      <h1 id="paper-title">What do you think<br>I’m gonna say?</h1>
+      <p class="paper-subtitle">A contextual evaluation of synthetic speech with listener anticipation and speech continuation</p>
+      <div class="hero-rule" aria-hidden="true"><span></span><span></span><span></span></div>
+    </section>
+
+    <section class="materials wrap" id="assignments" aria-labelledby="materials-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Experimental design</p>
+          <h2 id="materials-title">Latin-square assignments</h2>
+          <p class="section-intro">The assignment tables for the two question-act projection collections and the turn-completion study.</p>
+        </div>
+        <div class="resource-links">
+          <a class="button button-primary" href="https://docs.google.com/spreadsheets/d/1A1axH0PreGbZboZRoQDFE4l0X-o4XxLoZzsI5njjsAo/edit?gid=1702347402#gid=1702347402" target="_blank" rel="noopener noreferrer">Open spreadsheet <span aria-hidden="true">↗</span></a>
+          <a class="button button-secondary" href="downloads/latin-square-tables.zip" download>Download all tables <span aria-hidden="true">↓</span></a>
+        </div>
+      </div>
+
+      <div class="study-tabs" role="tablist" aria-label="Choose a study" hidden>
+        <button id="tab-question-first" type="button" role="tab" aria-selected="true" aria-controls="question-first" tabindex="0"><span class="tab-number">01</span><span>Question-act projection<small>First collection</small></span></button>
+        <button id="tab-question-second" type="button" role="tab" aria-selected="false" aria-controls="question-second" tabindex="-1"><span class="tab-number">02</span><span>Question-act projection<small>Second collection</small></span></button>
+        <button id="tab-turn" type="button" role="tab" aria-selected="false" aria-controls="turn" tabindex="-1"><span class="tab-number">03</span><span>Turn completion<small>End and Cont. phrases</small></span></button>
+      </div>
+
+      <section class="study-panel" id="question-first" aria-labelledby="heading-question-first">
+        <div class="panel-heading">
+          <div><h3 id="heading-question-first">Question-act projection · First collection</h3><p>27 phrases <span aria-hidden="true">·</span> 42 assignment lists</p></div>
+          <a class="text-link" href="tables/question-first.html" target="_blank" rel="noopener">Open full table <span aria-hidden="true">↗</span></a>
+        </div>
+        <p class="table-hint">Scroll sideways within the table to see all conditions. The numbers inside the matrix are list identifiers.</p>
+        <iframe src="tables/question-first.html" title="Question-act projection assignments, first collection" loading="lazy"></iframe>
+      </section>
+
+      <section class="study-panel" id="question-second" aria-labelledby="heading-question-second">
+        <div class="panel-heading">
+          <div><h3 id="heading-question-second">Question-act projection · Second collection</h3><p>27 phrases <span aria-hidden="true">·</span> 42 assignment lists</p></div>
+          <a class="text-link" href="tables/question-second.html" target="_blank" rel="noopener">Open full table <span aria-hidden="true">↗</span></a>
+        </div>
+        <p class="table-hint">This collection used a different assignment matrix. Scroll sideways within the table to see all conditions.</p>
+        <iframe src="tables/question-second.html" title="Question-act projection assignments, second collection" loading="lazy"></iframe>
+      </section>
+
+      <section class="study-panel" id="turn" aria-labelledby="heading-turn">
+        <div class="panel-heading">
+          <div><h3 id="heading-turn">Turn completion · End and Cont. phrases</h3><p>18 phrases <span aria-hidden="true">·</span> 27 assignment lists</p></div>
+          <a class="text-link" href="tables/turn-completion.html" target="_blank" rel="noopener">Open full table <span aria-hidden="true">↗</span></a>
+        </div>
+        <p class="table-hint">Cont. phrases appear first, followed by End phrases. Two list numbers in an End cell mean that the same recording was assigned to both lists.</p>
+        <iframe src="tables/turn-completion.html" title="Turn-completion assignments for Cont. and End phrases" loading="lazy"></iframe>
+      </section>
+
+      <div class="table-key" aria-labelledby="key-title">
+        <h3 id="key-title">Table key</h3>
+        <div class="key-grid">
+          <div><h4>Speech versions</h4><p><strong>Real</strong> is the original recording. <strong>Text</strong> is the text-only condition. <strong>OV</strong> = OmniVoice; <strong>F5</strong> = F5-TTS; <strong>CS2</strong> = CosyVoice2; <strong>Q3</strong> = Qwen3-TTS Base.</p></div>
+          <div><h4>Gates and punctuation</h4><p><strong>Early</strong>, <strong>Late</strong>, and <strong>Full</strong> indicate how much of the phrase was presented. The question-act tables separate synthesis with a period, a question mark, or no punctuation.</p></div>
+          <div><h4>Turn-completion conditions</h4><p><strong>S</strong> is the shared phrase; <strong>C</strong> is its continuation. <strong>S+C</strong> indicates that both were supplied for synthesis. Listeners heard only the selected portion of S.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap"><span>Speech continuation task</span><p>The tables reproduce the supplied spreadsheet exports. The download includes all three original HTML tables and their stylesheet.</p></footer>
+</body>
+</html>
