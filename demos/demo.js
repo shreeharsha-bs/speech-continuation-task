@@ -305,7 +305,6 @@
       if (heading) { heading.tabIndex = -1; heading.focus({preventScroll: true}); }
       app.scrollIntoView({block: 'start', behavior: 'instant'});
     }
-    function privacy() { app.append(element('p', 'Your responses stay in this browser.', {class: 'privacy-note'})); }
     function announce(message) {
       let node = app.querySelector('.error');
       if (!node) { node = element('p', '', {class: 'error', role: 'alert'}); app.prepend(node); }
@@ -345,7 +344,7 @@
       (Array.isArray(data.instructions) ? data.instructions : []).forEach(line => app.append(element('p', line)));
       app.append(element('p', 'Please use headphones. You can pause or replay the audio.'));
       const actions = element('div', undefined, {class: 'actions'}); actions.append(button('Take the listening test', start, 'primary')); app.append(actions);
-      privacy(); focusHeading();
+      focusHeading();
     }
     function setup() {
       clear();
@@ -377,7 +376,7 @@
       media.addEventListener('ended', () => { heardComplete = true; status.textContent = 'Confirm that the volume is comfortable, then continue.'; update(); });
       media.addEventListener('error', () => { status.textContent = 'The recording could not load. You can retry, or select the technical-problem option to continue.'; });
       comfortable.addEventListener('change', update); problem.addEventListener('change', update); update();
-      const actions = element('div', undefined, {class: 'actions'}); actions.append(next); app.append(actions); downloads(); privacy(); focusHeading();
+      const actions = element('div', undefined, {class: 'actions'}); actions.append(next); app.append(actions); downloads(); focusHeading();
     }
     function trial(item) {
       clear();
@@ -463,13 +462,13 @@
         playback = globalThis.SentenceFitPlayback.attach({media, draft, save: saveSoon, onChange: audioControls, onError: announce});
         media.addEventListener('loadedmetadata', audioControls);
       }
-      audioControls(); save(); downloads(); privacy(); focusHeading();
+      audioControls(); save(); downloads(); focusHeading();
     }
     function finished() {
       clear();
       app.append(element('h1', 'Thank you'));
       downloads();
-      privacy(); focusHeading();
+      focusHeading();
     }
     function render() {
       if (!state) return intro();
