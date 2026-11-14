@@ -313,7 +313,6 @@
     function downloads() {
       if (!state) return;
       const section = element('section', undefined, {class: 'download-area', 'aria-label': 'Download your responses'});
-      section.append(element('h2', 'Your responses'));
       const actions = element('div', undefined, {class: 'actions'});
       const exportCurrent = type => {
         save();
@@ -323,20 +322,10 @@
       };
       actions.append(button('Download CSV', () => exportCurrent('csv')), button('Download JSON', () => exportCurrent('json')));
       section.append(actions);
-      const restart = button('Take another listening test', () => {
-        restart.disabled = true;
-        const box = element('div', undefined, {class: 'restart-box'});
-        box.append(element('p', 'Starting again replaces your saved responses. Download them first to keep them.'));
-        const choices = element('div', undefined, {class: 'actions'});
-        choices.append(button('Start again', start, 'primary'), button('Cancel', () => { box.remove(); restart.disabled = false; restart.focus(); }));
-        box.append(choices); section.append(box); choices.firstChild.focus();
-      });
-      const restartActions = element('div', undefined, {class: 'actions'}); restartActions.append(restart); section.append(restartActions);
       app.append(section);
     }
     function start() {
-      const choices = state && data.lists.length > 1 ? {...data, lists: data.lists.filter(list => String(list.id) !== String(state.assignment_list))} : data;
-      state = createSession(choices); save(); render();
+      state = createSession(data); save(); render();
     }
     function intro() {
       clear();
