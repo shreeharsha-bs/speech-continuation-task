@@ -25,6 +25,18 @@ h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size
 .hero-rule span { width: 42px; height: 4px; background: var(--ink); }
 .hero-rule span:nth-child(2) { background: #91a780; }
 .hero-rule span:nth-child(3) { background: #d1dcbe; }
+.demo-section { border-top: 1px solid var(--line); padding-block: 40px; scroll-margin-top: 20px; }
+.demo-section > .eyebrow { margin-bottom: 9px; }
+.demo-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-top: 26px; }
+.demo-card { display: flex; flex-direction: column; align-items: flex-start; border: 1px solid var(--line); border-radius: 5px; background: white; padding: 25px; }
+.demo-card .demo-meta { margin: 0 0 10px; font-size: 11px; color: var(--muted); }
+.demo-card h3 { font-size: 21px; }
+.demo-card > p:not(.demo-meta) { margin: 12px 0 23px; color: var(--muted); font-size: 14px; max-width: 460px; }
+.demo-card .button { margin-top: auto; }
+.source-resource { display: flex; justify-content: space-between; gap: 30px; align-items: center; margin-top: 25px; }
+.source-resource h3 { font-size: 15px; }
+.source-resource p { font-size: 13px; color: var(--muted); margin: 5px 0 0; }
+.source-links { display: flex; gap: 22px; flex: 0 0 auto; }
 .materials { border-top: 1px solid var(--line); padding-top: 40px; scroll-margin-top: 20px; }
 .section-heading { display: flex; justify-content: space-between; gap: 36px; align-items: center; margin-bottom: 26px; }
 .section-heading .eyebrow { margin-bottom: 9px; }
@@ -66,6 +78,7 @@ footer > span { flex: 0 0 auto; font-weight: 600; }
   .hero { grid-template-columns: 1fr; gap: 30px; }
   .hero-figure { width: min(100%, 380px); justify-self: center; }
   .section-heading { align-items: flex-start; }
+  .source-resource { align-items: flex-start; flex-direction: column; gap: 14px; }
   .study-tabs button { padding-inline: 14px; gap: 9px; font-size: 12px; }
   .tab-number { display: none; }
   .key-grid { gap: 20px; }
@@ -78,6 +91,9 @@ footer > span { flex: 0 0 auto; font-weight: 600; }
   .hero { padding-block: 44px 35px; }
   .paper-subtitle { font-size: 16px; }
   .materials { padding-top: 30px; }
+  .demo-section { padding-block: 30px; }
+  .demo-cards { grid-template-columns: 1fr; gap: 15px; }
+  .demo-card { padding: 21px; }
   .section-heading { flex-direction: column; gap: 21px; }
   .resource-links { width: 100%; flex-direction: row; flex-wrap: wrap; }
   .button { flex: 1; gap: 12px; white-space: nowrap; padding: 10px 12px; font-size: 12px; }

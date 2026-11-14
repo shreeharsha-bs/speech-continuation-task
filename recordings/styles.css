@@ -1,0 +1,26 @@
+.recordings-main { padding-block: 27px 55px; }
+.back-link { display: inline-block; font-size: 13px; margin-bottom: 38px; }
+.recordings-heading { display: flex; justify-content: space-between; align-items: center; gap: 35px; }
+.recordings-heading h1 { font-size: clamp(36px, 4.7vw, 60px); margin-bottom: 20px; }
+.recordings-heading .eyebrow { margin-bottom: 12px; }
+.recording-downloads { display: flex; flex-direction: column; gap: 10px; flex: 0 0 auto; }
+.group-note { max-width: 840px; color: var(--muted); font-size: 13px; margin: 25px 0; }
+.recording-table-scroll { width: 100%; overflow-x: auto; border: 1px solid var(--line); border-radius: 5px; background: white; }
+.recording-table-scroll:focus-visible { outline: 3px solid #b56c13; outline-offset: 4px; }
+.recording-table-scroll table { width: 100%; min-width: 730px; border-collapse: collapse; text-align: left; font-size: 13px; }
+.recording-table-scroll caption { padding: 15px 20px; text-align: left; color: var(--muted); font-size: 12px; }
+.recording-table-scroll th, .recording-table-scroll td { padding: 12px 20px; border-top: 1px solid var(--line); }
+.recording-table-scroll thead { background: #edf0e6; }
+.recording-table-scroll thead th { font-weight: 600; white-space: nowrap; }
+.recording-table-scroll tbody th { font-weight: 600; font-variant-numeric: tabular-nums; }
+.recording-table-scroll tbody tr:nth-child(even) { background: #fafbf7; }
+.recording-id { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; white-space: nowrap; }
+@media (max-width: 850px) {
+  .recordings-heading { align-items: flex-start; flex-direction: column; gap: 23px; }
+  .recording-downloads { flex-direction: row; flex-wrap: wrap; }
+}
+@media (max-width: 600px) {
+  .recordings-main { padding-block: 20px 35px; }
+  .back-link { margin-bottom: 28px; }
+  .recording-table-scroll th, .recording-table-scroll td { padding: 11px 14px; }
+}

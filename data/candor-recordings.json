@@ -1,0 +1,317 @@
+[
+  {
+    "paper_phrase_id": 1,
+    "task": "question",
+    "phrase_group": "D",
+    "candor_recording_id": "0b019c01-a6b7-4753-afa3-f7bf964932c9",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 2,
+    "task": "question",
+    "phrase_group": "D",
+    "candor_recording_id": "0b019c01-a6b7-4753-afa3-f7bf964932c9",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 3,
+    "task": "question",
+    "phrase_group": "Q",
+    "candor_recording_id": "0b019c01-a6b7-4753-afa3-f7bf964932c9",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 4,
+    "task": "question",
+    "phrase_group": "D",
+    "candor_recording_id": "0b019c01-a6b7-4753-afa3-f7bf964932c9",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 5,
+    "task": "question",
+    "phrase_group": "Q",
+    "candor_recording_id": "11d12d5d-4913-4134-a768-79d47cb72374",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 6,
+    "task": "question",
+    "phrase_group": "Q",
+    "candor_recording_id": "11d12d5d-4913-4134-a768-79d47cb72374",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 7,
+    "task": "question",
+    "phrase_group": "Q",
+    "candor_recording_id": "19378a93-9f81-49c0-8433-674ea8bfdda6",
+    "speaker_channel": "R"
+  },
+  {
+    "paper_phrase_id": 8,
+    "task": "question",
+    "phrase_group": "D",
+    "candor_recording_id": "19378a93-9f81-49c0-8433-674ea8bfdda6",
+    "speaker_channel": "R"
+  },
+  {
+    "paper_phrase_id": 9,
+    "task": "question",
+    "phrase_group": "Q",
+    "candor_recording_id": "1eb0a263-5575-4bfe-a61b-c2c31e324834",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 10,
+    "task": "question",
+    "phrase_group": "D",
+    "candor_recording_id": "1eb0a263-5575-4bfe-a61b-c2c31e324834",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 11,
+    "task": "question",
+    "phrase_group": "Q",
+    "candor_recording_id": "41ec5281-ba08-4f5b-9d68-2dcd0d678501",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 12,
+    "task": "question",
+    "phrase_group": "D",
+    "candor_recording_id": "41ec5281-ba08-4f5b-9d68-2dcd0d678501",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 13,
+    "task": "question",
+    "phrase_group": "Q",
+    "candor_recording_id": "97b17342-a9c0-43ed-ad4f-02dfebfb7ce7",
+    "speaker_channel": "R"
+  },
+  {
+    "paper_phrase_id": 14,
+    "task": "question",
+    "phrase_group": "D",
+    "candor_recording_id": "97b17342-a9c0-43ed-ad4f-02dfebfb7ce7",
+    "speaker_channel": "R"
+  },
+  {
+    "paper_phrase_id": 15,
+    "task": "question",
+    "phrase_group": "Q",
+    "candor_recording_id": "97b17342-a9c0-43ed-ad4f-02dfebfb7ce7",
+    "speaker_channel": "R"
+  },
+  {
+    "paper_phrase_id": 16,
+    "task": "question",
+    "phrase_group": "D",
+    "candor_recording_id": "97b17342-a9c0-43ed-ad4f-02dfebfb7ce7",
+    "speaker_channel": "R"
+  },
+  {
+    "paper_phrase_id": 17,
+    "task": "question",
+    "phrase_group": "Q",
+    "candor_recording_id": "abb4c7de-38ff-4ca0-aff2-7411f055a758",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 18,
+    "task": "question",
+    "phrase_group": "D",
+    "candor_recording_id": "abb4c7de-38ff-4ca0-aff2-7411f055a758",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 19,
+    "task": "question",
+    "phrase_group": "Q",
+    "candor_recording_id": "e2238c08-0e10-4265-9f18-d3b387fa4056",
+    "speaker_channel": "R"
+  },
+  {
+    "paper_phrase_id": 20,
+    "task": "question",
+    "phrase_group": "D",
+    "candor_recording_id": "e2238c08-0e10-4265-9f18-d3b387fa4056",
+    "speaker_channel": "R"
+  },
+  {
+    "paper_phrase_id": 21,
+    "task": "question",
+    "phrase_group": "D",
+    "candor_recording_id": "cc7ea669-d658-4508-8d31-87c646bc580e",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 22,
+    "task": "question",
+    "phrase_group": "D",
+    "candor_recording_id": "f7c8a6ae-6952-40e6-a0cf-5235594c6612",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 23,
+    "task": "question",
+    "phrase_group": "Q",
+    "candor_recording_id": "f7c8a6ae-6952-40e6-a0cf-5235594c6612",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 24,
+    "task": "question",
+    "phrase_group": "D",
+    "candor_recording_id": "582ea058-c65e-4739-aaac-46d498956317",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 25,
+    "task": "question",
+    "phrase_group": "Q",
+    "candor_recording_id": "582ea058-c65e-4739-aaac-46d498956317",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 26,
+    "task": "question",
+    "phrase_group": "D",
+    "candor_recording_id": "7c35d830-2cc5-487b-9ca2-4385fbb38e86",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 27,
+    "task": "question",
+    "phrase_group": "D",
+    "candor_recording_id": "7c35d830-2cc5-487b-9ca2-4385fbb38e86",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 28,
+    "task": "turn",
+    "phrase_group": "End",
+    "candor_recording_id": "0159f2d4-f6db-46f8-b7c6-96a3df97b246",
+    "speaker_channel": "R"
+  },
+  {
+    "paper_phrase_id": 29,
+    "task": "turn",
+    "phrase_group": "End",
+    "candor_recording_id": "01a4c01c-cf0e-4f37-ab2b-641bb604af30",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 30,
+    "task": "turn",
+    "phrase_group": "End",
+    "candor_recording_id": "02e02af3-8df5-4e65-a1b1-bb1a5ca44879",
+    "speaker_channel": "R"
+  },
+  {
+    "paper_phrase_id": 31,
+    "task": "turn",
+    "phrase_group": "End",
+    "candor_recording_id": "0baae204-e051-464a-982d-70df8b90608b",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 32,
+    "task": "turn",
+    "phrase_group": "End",
+    "candor_recording_id": "bce0bc62-239e-4fdd-b2b8-252a4a6df717",
+    "speaker_channel": "R"
+  },
+  {
+    "paper_phrase_id": 33,
+    "task": "turn",
+    "phrase_group": "End",
+    "candor_recording_id": "01a4c01c-cf0e-4f37-ab2b-641bb604af30",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 34,
+    "task": "turn",
+    "phrase_group": "End",
+    "candor_recording_id": "047ad63e-bcb7-47c8-9e54-f53572e1ad5f",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 35,
+    "task": "turn",
+    "phrase_group": "End",
+    "candor_recording_id": "06d767f9-e1f9-4677-8fe6-40ca4b91e1ee",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 36,
+    "task": "turn",
+    "phrase_group": "End",
+    "candor_recording_id": "53ea87fe-9cea-4434-9c1d-25f166620630",
+    "speaker_channel": "R"
+  },
+  {
+    "paper_phrase_id": 37,
+    "task": "turn",
+    "phrase_group": "Cont",
+    "candor_recording_id": "0d0c3cc7-667b-483e-a2f1-7028ecbed62e",
+    "speaker_channel": "R"
+  },
+  {
+    "paper_phrase_id": 38,
+    "task": "turn",
+    "phrase_group": "Cont",
+    "candor_recording_id": "9ac941a3-3b04-4bb0-8cb1-d6dcc2583b93",
+    "speaker_channel": "L"
+  },
+  {
+    "paper_phrase_id": 39,
+    "task": "turn",
+    "phrase_group": "Cont",
+    "candor_recording_id": "01a4c01c-cf0e-4f37-ab2b-641bb604af30",
+    "speaker_channel": "R"
+  },
+  {
+    "paper_phrase_id": 40,
+    "task": "turn",
+    "phrase_group": "Cont",
+    "candor_recording_id": "777e03b5-425e-43eb-af4f-d8dbb313c319",
+    "speaker_channel": "R"
+  },
+  {
+    "paper_phrase_id": 41,
+    "task": "turn",
+    "phrase_group": "Cont",
+    "candor_recording_id": "70dea9ad-baf7-4699-96a3-642508a8f69e",
+    "speaker_channel": "R"
+  },
+  {
+    "paper_phrase_id": 42,
+    "task": "turn",
+    "phrase_group": "Cont",
+    "candor_recording_id": "06d767f9-e1f9-4677-8fe6-40ca4b91e1ee",
+    "speaker_channel": "R"
+  },
+  {
+    "paper_phrase_id": 43,
+    "task": "turn",
+    "phrase_group": "Cont",
+    "candor_recording_id": "249a5491-5c41-42d4-bcb0-5f72dfd8baa2",
+    "speaker_channel": "R"
+  },
+  {
+    "paper_phrase_id": 44,
+    "task": "turn",
+    "phrase_group": "Cont",
+    "candor_recording_id": "047ad63e-bcb7-47c8-9e54-f53572e1ad5f",
+    "speaker_channel": "R"
+  },
+  {
+    "paper_phrase_id": 45,
+    "task": "turn",
+    "phrase_group": "Cont",
+    "candor_recording_id": "7253c38f-1439-462d-b699-d4712a9bf093",
+    "speaker_channel": "L"
+  }
+]
