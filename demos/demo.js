@@ -324,48 +324,128 @@
       section.append(actions);
       app.append(section);
     }
-    function start() {
-      state = createSession(data); save(); render();
+    function start(headphonesConfirmed = false) {
+      state = createSession(data);
+      state.preparation.headphones_confirmed = headphonesConfirmed === true;
+      save(); render();
     }
     function intro() {
       clear();
-      app.append(element('h1', data.title || 'Listening test'));
+      app.append(element('h1', 'Speech study'));
       (Array.isArray(data.instructions) ? data.instructions : []).forEach(line => app.append(element('p', line)));
-      app.append(element('p', 'Please use headphones. You can pause or replay the audio.'));
-      const actions = element('div', undefined, {class: 'actions'}); actions.append(button('Take the listening test', start, 'primary')); app.append(actions);
+      if (data.study_id === 'turn') app.append(element('p', 'Some audio extracts are intentionally cut off before the sentence finishes. This is part of the study. Listen until the extract ends, then choose which sentence the audio is more likely to be part of. You do not need to hear either sentence in full.'));
+      app.append(element('p', 'Please use headphones and a comfortable listening volume. You can pause the recording or press Play again after it ends.'));
+      const label = element('label', undefined, {class: 'check'}), headphones = element('input', undefined, {type: 'checkbox'});
+      label.append(headphones, document.createTextNode('I am using headphones.')); app.append(label);
+      const begin = button('Start', () => start(headphones.checked), 'primary'); begin.disabled = true;
+      headphones.addEventListener('change', () => { begin.disabled = !headphones.checked; });
+      const actions = element('div', undefined, {class: 'actions'}); actions.append(begin); app.append(actions);
       focusHeading();
     }
+    function studyHeading(progress) {
+      const heading = element('header', undefined, {class: 'study-heading'});
+      heading.append(element('h1', 'Speech study'), element('p', progress, {class: 'progress-label'}));
+      app.append(heading);
+    }
+    function technicalControls(cell, draft, onChange) {
+      const details = element('details', undefined, {class: 'technical-box'});
+      const problem = element('select', undefined, {id: 'technical-problem'});
+      const note = element('textarea', undefined, {id: 'technical-note', rows: 2, maxlength: 500, placeholder: 'Describe the problem (optional).'});
+      const fields = element('div', undefined, {class: 'technical-fields'});
+      const problems = [['', 'Choose a problem'], ['audio_load', 'The audio did not load'], ['audio_playback', 'The audio would not play'], ['display', 'The words or choices did not display'], ['other', 'Another technical problem']];
+      problems.forEach(([value, label]) => {
+        if (cell.modality === 'text' && value.startsWith('audio_')) return;
+        problem.append(element('option', label, {value}));
+      });
+      // Keep an unfinished response readable if it was started in the earlier UI.
+      const earlierReasons = {audio_did_not_play: 'audio_playback', audio_not_audible: 'audio_playback', text_not_displayed: 'display'};
+      if (earlierReasons[draft.technical_problem]) draft.technical_problem = earlierReasons[draft.technical_problem];
+      problem.value = draft.technical_problem || '';
+      note.value = draft.technical_note || '';
+      details.open = Boolean(draft.technical_problem);
+      details.append(element('summary', 'Report a technical problem'));
+      fields.append(element('label', 'What went wrong?', {for: 'technical-problem'}), problem, element('label', 'Optional details', {for: 'technical-note'}), note);
+      details.append(fields);
+      problem.addEventListener('change', () => {
+        draft.technical_problem = problem.value || null;
+        if (problem.value) draft.choice = null;
+        save(); onChange();
+      });
+      note.addEventListener('input', () => { draft.technical_note = note.value; saveSoon(); });
+      return {node: details, clear() { draft.technical_problem = null; problem.value = ''; details.open = false; }};
+    }
+    function audioStimulus(cell, draft) {
+      const group = element('div', undefined, {class: 'playback-controls', role: 'group', 'aria-label': 'Audio playback'});
+      const audioMedia = element('audio', undefined, {preload: 'auto', hidden: '', 'aria-label': 'Conversation extract'});
+      media = audioMedia;
+      const play = button('Play', () => playback?.play());
+      const pause = button('Pause', () => playback?.pause());
+      const reload = button('Reload audio', () => loadSource()); reload.hidden = true;
+      const status = element('p', 'Listen to the whole extract before answering.', {class: 'readiness', role: 'status', 'aria-live': 'polite'});
+      const audioError = element('p', '', {class: 'error', 'aria-live': 'assertive'}); audioError.hidden = true;
+      let loading = true, failed = false;
+      group.append(play, pause, reload);
+      const node = element('div', undefined, {class: 'audio-stimulus'}); node.append(audioMedia, group, status, audioError);
+      function update() {
+        if (media !== audioMedia) return;
+        const audioReady = !failed && audioMedia.readyState >= 2;
+        play.disabled = !audioReady || (!audioMedia.paused && !audioMedia.ended);
+        pause.disabled = !audioReady || audioMedia.paused || audioMedia.ended;
+        reload.hidden = !failed;
+        status.textContent = failed ? 'Audio could not play. Select Reload audio to try again.' : loading ? 'Loading audio…' : !audioMedia.paused && !audioMedia.ended ? 'Listening…' : draft.first_play_completed ? 'You have listened to the whole extract. Press Play to listen again.' : 'Audio ready. Press Play and listen to the whole extract before answering.';
+      }
+      function changed() { if (media !== audioMedia) return; update(); audioControls(); }
+      function loadSource() {
+        if (media !== audioMedia) return;
+        if (playback) playback.destroy();
+        audioMedia.pause();
+        draft.first_play_completed = false; draft.audio_started = false; draft.audio_ended = false;
+        loading = true; failed = false; audioError.textContent = ''; audioError.hidden = true;
+        playback = globalThis.SentenceFitPlayback.attach({media: audioMedia, draft, save: saveSoon, onChange: changed, onError: () => {
+          loading = false; failed = true;
+          audioError.textContent = 'Audio could not play. Select Reload audio to try again.'; audioError.hidden = false;
+          changed();
+        }});
+        audioMedia.src = cell.audio_url; audioMedia.load(); changed();
+      }
+      audioMedia.addEventListener('loadstart', () => { loading = true; changed(); });
+      audioMedia.addEventListener('canplay', () => { loading = false; changed(); });
+      audioMedia.addEventListener('waiting', () => { loading = true; changed(); });
+      audioMedia.addEventListener('playing', () => { loading = false; changed(); });
+      audioMedia.addEventListener('ended', changed);
+      return {node, update, load: loadSource};
+    }
     function setup() {
-      clear();
-      app.append(element('p', 'Audio setup', {class: 'eyebrow'}), element('h1', 'Check your sound'));
+      clear(); studyHeading('Sound check');
       const sample = data.practice.find(cell => cell.modality === 'audio');
       if (!sample) {
         state.preparation.audio_setup_completed = true;
         state.preparation.audio_setup_status = 'no_audio_practice_available';
         save(); render(); return;
       }
-      app.append(element('p', 'Play this practice recording and adjust your volume to a comfortable level.'));
-      media = element('audio', undefined, {controls: '', preload: 'none', 'aria-label': 'Sound check recording'});
-      media.src = sample.audio_url; app.append(media);
-      const check = (label, checked = false) => {
-        const node = element('label', undefined, {class: 'check'}), input = element('input', undefined, {type: 'checkbox'});
-        input.checked = checked; node.append(input, document.createTextNode(label)); app.append(node); return input;
-      };
-      let heardComplete = false;
-      const comfortable = check('I can hear the recording at a comfortable volume.');
-      const problem = check('The recording will not play or I cannot hear it.');
-      const status = element('p', 'Play the recording to the end, then confirm the volume.', {class: 'muted', role: 'status'}); app.append(status);
-      const next = button('Continue to practice', () => {
-        if (!(problem.checked || (heardComplete && comfortable.checked))) return;
+      state.preparation.audio_setup_draft = state.preparation.audio_setup_draft || {};
+      const draft = state.preparation.audio_setup_draft;
+      draft.first_play_completed = false;
+      const audio = audioStimulus(sample, draft); app.append(audio.node);
+      app.append(element('h2', 'Check your listening volume'), element('p', 'Play the recording and adjust your device volume until the speech is comfortable to hear.'));
+      const label = element('label', undefined, {class: 'check'}), comfortable = element('input', undefined, {type: 'checkbox'});
+      comfortable.checked = draft.volume_confirmed === true;
+      label.append(comfortable, document.createTextNode('I can hear the recording at a comfortable volume.')); app.append(label);
+      const technical = technicalControls(sample, draft, () => audioControls()); app.append(technical.node);
+      const next = button('Continue', () => {
+        if (!(draft.technical_problem || (draft.first_play_completed && comfortable.checked))) return;
         state.preparation = {...state.preparation, audio_setup_completed: true, audio_setup_cell_id: sample.cell_id,
-          audio_setup_status: problem.checked ? 'technical_problem' : 'comfortable_volume_confirmed', audio_setup_completed_at: timestamp()};
+          audio_setup_status: draft.technical_problem ? 'technical_problem' : 'comfortable_volume_confirmed', audio_setup_completed_at: timestamp()};
         save(); render();
       }, 'primary');
-      function update() { next.disabled = !(problem.checked || (heardComplete && comfortable.checked)); }
-      media.addEventListener('ended', () => { heardComplete = true; status.textContent = 'Confirm that the volume is comfortable, then continue.'; update(); });
-      media.addEventListener('error', () => { status.textContent = 'The recording could not load. You can retry, or select the technical-problem option to continue.'; });
-      comfortable.addEventListener('change', update); problem.addEventListener('change', update); update();
-      const actions = element('div', undefined, {class: 'actions'}); actions.append(next); app.append(actions); downloads(); focusHeading();
+      comfortable.addEventListener('change', () => { draft.volume_confirmed = comfortable.checked; save(); audioControls(); });
+      audioControls = () => {
+        comfortable.disabled = !draft.first_play_completed;
+        next.disabled = !(draft.technical_problem || (draft.first_play_completed && comfortable.checked));
+        audio.update();
+      };
+      const actions = element('div', undefined, {class: 'actions'}); actions.append(next); app.append(actions); downloads();
+      audioControls(); audio.load(); focusHeading();
     }
     function trial(item) {
       clear();
@@ -373,49 +453,32 @@
       if (!state.draft) state.draft = {key: itemKey(item.assignment, item.practice), cell_id: cell.cell_id, started_at: timestamp(), elapsed_ms: 0, choice: null, technical_problem: null, technical_note: '', first_play_completed: false};
       const draft = state.draft;
       previousElapsed = Number(draft.elapsed_ms) || 0; viewStarted = performance.now();
-      app.append(element('h1', `${item.practice ? 'Practice' : 'Item'} ${item.position} of ${total}`));
-      const progress = element('progress', undefined, {class: 'study-progress', max: total, value: item.position - 1, 'aria-label': item.practice ? 'Practice progress' : 'Study progress'}); app.append(progress);
-      const audioStatus = element('p', '', {class: 'readiness', role: 'status', 'aria-live': 'polite'});
-      const stimulus = element('div', undefined, {class: 'demo-card'});
-      let playButton, pauseButton, replayButton, timeLabel, audioProgress;
-      if (cell.modality === 'audio') {
-        media = element('audio', undefined, {preload: 'none'}); media.src = cell.audio_url;
-        const controls = element('div', undefined, {class: 'playback-controls'});
-        playButton = button('Play recording', () => playback?.play(), 'primary');
-        pauseButton = button('Pause', () => playback?.pause());
-        replayButton = button('Replay from start', () => playback?.replay());
-        controls.append(playButton, pauseButton, replayButton);
-        audioProgress = element('progress', undefined, {class: 'audio-progress', max: 1, value: 0, 'aria-label': 'Recording progress'});
-        const caption = element('div', undefined, {class: 'playback-caption'});
-        timeLabel = element('p', '0:00', {'aria-hidden': 'true'}); caption.append(audioStatus, timeLabel);
-        stimulus.append(media, controls, audioProgress, caption);
-      } else {
-        stimulus.append(element('p', 'Read the extract:', {class: 'muted'}), element('p', cell.text, {class: 'text-stimulus'}));
+      studyHeading(`${item.practice ? 'Practice' : 'Item'} ${item.position} of ${total}`);
+      let audio = null;
+      if (cell.modality === 'audio') { audio = audioStimulus(cell, draft); app.append(audio.node); }
+      else {
+        if (data.study_id === 'question') app.append(element('p', 'Text-only item: read the words below. This item has no audio.', {class: 'instructions'}));
+        app.append(element('p', cell.text, {class: 'text-stimulus'}));
       }
-      app.append(stimulus);
-      const fieldset = element('fieldset', undefined, {class: 'answer-options'}); fieldset.append(element('legend', cell.question));
-      const radios = [];
-      for (const id of item.assignment.option_order) {
+      app.append(element('h2', cell.question, {id: 'sentence-fit-question', tabindex: '-1'}));
+      if (data.study_id === 'turn') app.append(element('p', 'Some extracts stop mid-sentence. Choose the sentence the audio is more likely to be part of, even if neither sentence is heard in full.', {class: 'instructions'}));
+      if (item.practice) app.append(element('p', data.study_id === 'turn' ? 'Try the controls and choose the sentence that fits better. Your answer will not be marked right or wrong.' : 'Try the controls and answer the question. Your answer will not be marked right or wrong.', {class: 'instructions'}));
+      const choices = element('div', undefined, {class: 'answer-options', role: 'group', 'aria-labelledby': 'sentence-fit-question'});
+      const selection = element('p', '', {class: 'choice-status', 'aria-live': 'polite'});
+      const answerButtons = [];
+      const technical = technicalControls(cell, draft, () => audioControls());
+      item.assignment.option_order.forEach((id, index) => {
         const option = cell.options.find(candidate => candidate.id === id);
-        const label = element('label', undefined, {class: 'answer-choice'});
-        const input = element('input', undefined, {type: 'radio', name: 'answer', value: id}); input.checked = draft.choice === id;
-        input.addEventListener('change', () => { draft.choice = id; save(); audioControls(); });
-        label.append(input, element('span', option.text)); fieldset.append(label); radios.push(input);
-      }
-      app.append(fieldset);
-      const technical = element('div', undefined, {class: 'technical-box'});
-      const problemLabel = element('label', undefined, {class: 'check'}), problem = element('input', undefined, {type: 'checkbox'});
-      problem.checked = Boolean(draft.technical_problem);
-      problemLabel.append(problem, document.createTextNode('I had a technical problem with this item.'));
-      const technicalFields = element('div', undefined, {class: 'technical-fields'});
-      const reasonLabel = element('label', 'What happened?', {for: 'technical-reason'}), reason = element('select', undefined, {id: 'technical-reason'});
-      const reasons = cell.modality === 'audio' ? [['audio_did_not_play', 'The recording did not play'], ['audio_not_audible', 'I could not hear the recording'], ['other', 'Another technical problem']] : [['text_not_displayed', 'The text did not display properly'], ['other', 'Another technical problem']];
-      reasons.forEach(([id, label]) => reason.append(element('option', label, {value: id})));
-      if (draft.technical_problem) reason.value = draft.technical_problem;
-      const noteLabel = element('label', 'Optional note', {for: 'technical-note'}), note = element('textarea', undefined, {id: 'technical-note', maxlength: 500, rows: 2}); note.value = draft.technical_note || '';
-      technicalFields.append(reasonLabel, reason, noteLabel, note); technical.append(problemLabel, technicalFields); app.append(technical);
-      const isLast = !item.practice && item.position === total;
-      const next = button(isLast ? 'Finish' : item.practice && item.position === total ? 'Continue' : 'Next item', () => {
+        const choice = button('', () => {
+          if (!ready(cell, draft)) return;
+          draft.choice = id; technical.clear(); save(); audioControls();
+        }, 'answer-choice');
+        choice.dataset.choice = id; choice.setAttribute('aria-pressed', 'false');
+        if (data.study_id === 'turn') choice.append(element('span', index === 0 ? 'A' : 'B', {class: 'answer-letter', 'aria-hidden': 'true'}));
+        choice.append(element('span', option.text)); choices.append(choice); answerButtons.push(choice);
+      });
+      app.append(choices, selection, technical.node);
+      const next = button('Next', () => {
         if (!canAdvance(cell, draft)) { announce('Listen to the complete recording and choose an answer, or report a technical problem.'); return; }
         elapsed();
         state.responses.push(makeResponse(cell, draft, item));
@@ -424,34 +487,17 @@
         save(); render();
       }, 'primary');
       const actions = element('div', undefined, {class: 'actions'}); actions.append(next); app.append(actions);
-      function technicalChange() {
-        draft.technical_problem = problem.checked ? reason.value : null;
-        draft.technical_note = note.value; save(); audioControls();
-      }
-      problem.addEventListener('change', technicalChange); reason.addEventListener('change', technicalChange); note.addEventListener('input', technicalChange);
-      function formattedTime(value) { const seconds = Math.max(0, Math.floor(Number(value) || 0)); return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`; }
       audioControls = () => {
-        const canAnswer = ready(cell, draft) && !draft.technical_problem;
-        radios.forEach(input => { input.disabled = !canAnswer; });
-        technicalFields.hidden = !problem.checked;
+        answerButtons.forEach(choice => {
+          choice.disabled = !ready(cell, draft);
+          choice.setAttribute('aria-pressed', String(choice.dataset.choice === draft.choice));
+        });
+        selection.textContent = draft.technical_problem ? 'Technical problem selected. You can continue.' : draft.choice ? 'Answer selected.' : '';
+        selection.hidden = !selection.textContent;
         next.disabled = !canAdvance(cell, draft);
-        if (cell.modality === 'audio' && media) {
-          pauseButton.disabled = media.paused || media.ended;
-          playButton.disabled = !media.paused && !media.ended;
-          playButton.textContent = media.ended ? 'Play again' : media.currentTime > 0 ? 'Resume recording' : 'Play recording';
-          replayButton.disabled = !draft.audio_started;
-          const duration = Number.isFinite(media.duration) ? media.duration : 0;
-          audioProgress.max = duration || 1; audioProgress.value = media.currentTime || 0;
-          timeLabel.textContent = `${formattedTime(media.currentTime)}${duration ? ` / ${formattedTime(duration)}` : ''}`;
-          const message = draft.first_play_completed ? 'Recording heard. You can choose an answer or replay.' : 'Listen to the complete recording before choosing an answer.';
-          if (audioStatus.textContent !== message) audioStatus.textContent = message;
-        }
+        audio?.update();
       };
-      if (cell.modality === 'audio') {
-        playback = globalThis.SentenceFitPlayback.attach({media, draft, save: saveSoon, onChange: audioControls, onError: announce});
-        media.addEventListener('loadedmetadata', audioControls);
-      }
-      audioControls(); save(); downloads(); focusHeading();
+      audioControls(); save(); downloads(); audio?.load(); focusHeading();
     }
     function finished() {
       clear();
