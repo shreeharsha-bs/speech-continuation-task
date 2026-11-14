@@ -305,7 +305,7 @@
       if (heading) { heading.tabIndex = -1; heading.focus({preventScroll: true}); }
       app.scrollIntoView({block: 'start', behavior: 'instant'});
     }
-    function privacy() { app.append(element('p', 'Your responses stay in this browser. You can download them when finished.', {class: 'privacy-note'})); }
+    function privacy() { app.append(element('p', 'Your responses stay in this browser.', {class: 'privacy-note'})); }
     function announce(message) {
       let node = app.querySelector('.error');
       if (!node) { node = element('p', '', {class: 'error', role: 'alert'}); app.prepend(node); }
@@ -323,13 +323,13 @@
         download(type === 'csv' ? toCSV(output) : JSON.stringify(output, null, 2), type === 'csv' ? 'text/csv;charset=utf-8' : 'application/json', `${stem}.${type}`);
       };
       actions.append(button('Download CSV', () => exportCurrent('csv')), button('Download JSON', () => exportCurrent('json')));
-      section.append(actions, element('p', 'Downloads contain only this demo session, including practice and any unanswered items. You can download partial results at any time.', {class: 'download-note'}));
-      const restart = button('Try another random list', () => {
+      section.append(actions);
+      const restart = button('Take another listening test', () => {
         restart.disabled = true;
         const box = element('div', undefined, {class: 'restart-box'});
-        box.append(element('p', 'Download your current responses first if you want to keep them. Starting again replaces this demo session in this browser.'));
+        box.append(element('p', 'Starting again replaces your saved responses. Download them first to keep them.'));
         const choices = element('div', undefined, {class: 'actions'});
-        choices.append(button('Start another demo', start, 'primary'), button('Keep current results', () => { box.remove(); restart.disabled = false; restart.focus(); }));
+        choices.append(button('Start again', start, 'primary'), button('Cancel', () => { box.remove(); restart.disabled = false; restart.focus(); }));
         box.append(choices); section.append(box); choices.firstChild.focus();
       });
       const restartActions = element('div', undefined, {class: 'actions'}); restartActions.append(restart); section.append(restartActions);
@@ -341,12 +341,10 @@
     }
     function intro() {
       clear();
-      app.append(element('p', 'Public demo', {class: 'eyebrow'}), element('h1', data.title || 'Listening-study demo'));
+      app.append(element('h1', data.title || 'Listening test'));
       (Array.isArray(data.instructions) ? data.instructions : []).forEach(line => app.append(element('p', line)));
-      app.append(element('p', `The demo includes ${data.practice.length} practice ${data.practice.length === 1 ? 'item' : 'items'}, followed by ${data.trials_per_session} study items. One complete assignment list is selected at random, and its items are shown in a random order.`));
-      app.append(element('p', 'Please use headphones in a quiet place and set a comfortable volume. You can replay recordings. There is no score.'));
-      app.append(element('p', 'If you close or reload the page, this browser can resume your current list. Starting another demo replaces the current session after you confirm.', {class: 'muted'}));
-      const actions = element('div', undefined, {class: 'actions'}); actions.append(button('Start demo', start, 'primary')); app.append(actions);
+      app.append(element('p', 'Please use headphones. You can pause or replay the audio.'));
+      const actions = element('div', undefined, {class: 'actions'}); actions.append(button('Take the listening test', start, 'primary')); app.append(actions);
       privacy(); focusHeading();
     }
     function setup() {
@@ -358,7 +356,7 @@
         state.preparation.audio_setup_status = 'no_audio_practice_available';
         save(); render(); return;
       }
-      app.append(element('p', 'Play this practice recording and adjust your volume to a comfortable level. This sound check is separate from your practice answers.'));
+      app.append(element('p', 'Play this practice recording and adjust your volume to a comfortable level.'));
       media = element('audio', undefined, {controls: '', preload: 'none', 'aria-label': 'Sound check recording'});
       media.src = sample.audio_url; app.append(media);
       const check = (label, checked = false) => {
@@ -367,7 +365,7 @@
       };
       let heardComplete = false;
       const comfortable = check('I can hear the recording at a comfortable volume.');
-      const problem = check('The recording will not play or I cannot hear it. Continue with a technical problem noted.');
+      const problem = check('The recording will not play or I cannot hear it.');
       const status = element('p', 'Play the recording to the end, then confirm the volume.', {class: 'muted', role: 'status'}); app.append(status);
       const next = button('Continue to practice', () => {
         if (!(problem.checked || (heardComplete && comfortable.checked))) return;
@@ -387,8 +385,7 @@
       if (!state.draft) state.draft = {key: itemKey(item.assignment, item.practice), cell_id: cell.cell_id, started_at: timestamp(), elapsed_ms: 0, choice: null, technical_problem: null, technical_note: '', first_play_completed: false};
       const draft = state.draft;
       previousElapsed = Number(draft.elapsed_ms) || 0; viewStarted = performance.now();
-      app.append(element('p', item.practice ? 'Practice' : 'Study items', {class: 'eyebrow'}), element('h1', `${item.practice ? 'Practice' : 'Item'} ${item.position} of ${total}`));
-      app.append(element('p', item.practice ? 'Use this item to get familiar with the task. No score is shown.' : `Assignment list ${state.assignment_list}`, {class: 'progress-label'}));
+      app.append(element('h1', `${item.practice ? 'Practice' : 'Item'} ${item.position} of ${total}`));
       const progress = element('progress', undefined, {class: 'study-progress', max: total, value: item.position - 1, 'aria-label': item.practice ? 'Practice progress' : 'Study progress'}); app.append(progress);
       const audioStatus = element('p', '', {class: 'readiness', role: 'status', 'aria-live': 'polite'});
       const stimulus = element('div', undefined, {class: 'demo-card'});
@@ -430,7 +427,7 @@
       const noteLabel = element('label', 'Optional note', {for: 'technical-note'}), note = element('textarea', undefined, {id: 'technical-note', maxlength: 500, rows: 2}); note.value = draft.technical_note || '';
       technicalFields.append(reasonLabel, reason, noteLabel, note); technical.append(problemLabel, technicalFields); app.append(technical);
       const isLast = !item.practice && item.position === total;
-      const next = button(isLast ? 'Finish demo' : item.practice && item.position === total ? 'Continue to study items' : 'Next item', () => {
+      const next = button(isLast ? 'Finish' : item.practice && item.position === total ? 'Continue' : 'Next item', () => {
         if (!canAdvance(cell, draft)) { announce('Listen to the complete recording and choose an answer, or report a technical problem.'); return; }
         elapsed();
         state.responses.push(makeResponse(cell, draft, item));
@@ -470,9 +467,7 @@
     }
     function finished() {
       clear();
-      const count = state.responses.filter(response => !response.is_practice).length;
-      app.append(element('p', 'Demo complete', {class: 'eyebrow'}), element('h1', 'You’ve reached the end'),
-        element('p', `You submitted ${count} study items and ${state.practice_assignments.length} practice ${state.practice_assignments.length === 1 ? 'item' : 'items'} from assignment list ${state.assignment_list}. Technical-problem reports are included in these counts.`, {class: 'completion-count'}));
+      app.append(element('h1', 'Thank you'));
       downloads();
       privacy(); focusHeading();
     }
